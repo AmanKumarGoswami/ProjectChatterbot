@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GUI</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/main.css')}}">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<SCRIPT language="javascript">
+	//$.ajaxSetup({ contentType: "application/json; charset=utf-8", });
+
+
+function doWork(query) {
+	var qry ={"id" : query};
+	add("You : "+query);
+	$.ajax({
+      type: 'POST',
+      url: "receiver",
+      data: JSON.stringify(qry),
+      contentType: "application/json; charset=utf-8",
+      success: function(resultData) { console.log(resultData)
+      processResponse (resultData);
+       }
+});
+}
+
+function callNewsApi(query) {
+	var qry =JSON.stringify({"id" : query});
+	console.log(qry);
+	add("You : "+query);
+	$.ajax({
+      type: 'POST',
+      url: "receiverT",
+      data: qry,
+      contentType: "application/json; charset=utf-8",
+      success: function(resultData) { console.log(resultData)
+      processResponse (resultData);
+    }
+});
+}
+	function processResponse(resultData)
+	{
+		add("Bot : "+resultData);
+	}
+
+	function add(type) {
+		console.log(type)
+		//Create an input type dynamically.
+		var unorderedList = document.getElementById("ul");
+		var element = document.createElement("li");
+
+		//Assign different attributes to the element.
+		 //var textnode = document.createTextNode(type);
+		 //element.appendChild(textnode);
+
+		$(element).html(type);
+
+		//Append the element in page (in span).
+		unorderedList.appendChild(element);
+
+		document.getElementById("cmd").value = "";
+	}
+	</SCRIPT>	
+</head>
+<body style="background-image: url({{ url_for('static', filename='imgs/techb.png') }})">
+<div class="log">
+	<img src="{{url_for('static', filename='imgs/logo.jpg')}}" class="admin">
+		<h1>CHATTERBOT</h1>
+		<div style="height:340px;width:1250px;border:solid 2px black;overflow:scroll;overflow-x:hidden;overflow-y:scroll;font-size: 15px">
+			<ul id="ul" style="height:200px; list-style-type: none;font-size:30px">
+			</ul>
+		</div>
+	<span id="fooBar">&nbsp</span>
+	<div>
+		<input type="text" id="cmd" name="" placeholder="TYPE COMMANDS...">
+		<!--INPUT type="submit" value="Add" onclick="add(document.getElementById('cmd').value)"/-->
+		<INPUT type="submit" value="Add" onclick="doWork(document.getElementById('cmd').value)">
+	</div>
+</div>
+</body>
+</html>
